@@ -58,7 +58,7 @@ export function fetchProperties() {
 
     return (new Parse.Query(Property))
       .ascending('name')
-      .include('units')
+      .include('buildings')
       .find()
       .then(properties => dispatch(receiveProperties(properties)))
   }

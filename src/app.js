@@ -16,6 +16,7 @@ import createHistory from 'history/lib/createHashHistory'
 
 import Root from './components/Root'
 import PropertyListContainer from './containers/PropertyListContainer'
+import BuildingListContainer from './containers/BuildingListContainer'
 import UnitListContainer from './containers/UnitListContainer'
 import LoginContainer from './containers/LoginContainer'
 import CreateTenantContainer from './containers/CreateTenantContainer'
@@ -66,11 +67,15 @@ function requireAuth(nextState, replace) {
 render((
   <Provider store={store}>
     <Router history={history}>
-      <Route path="/" component={Root}>
-        <IndexRoute component={PropertyListContainer} onEnter={requireAuth} />
-        <Route path="login" component={LoginContainer} />
-        <Route path="units/:id" component={UnitListContainer} onEnter={requireAuth} />
-        <Route path="new-tenant" component={CreateTenantContainer} onEnter={requireAuth} />
+      <Route component={Root}>
+        <Route path="/" component={PropertyListContainer} onEnter={requireAuth}>
+          <Route path=":id/buildings" component={BuildingListContainer}>
+          </Route>
+        </Route>
+        <Route path="/login" component={LoginContainer} />
+        <Route path=":id/units" component={UnitListContainer} onEnter={requireAuth} />
+
+        <Route path="/new-tenant" component={CreateTenantContainer} onEnter={requireAuth} />
       </Route>
     </Router>
   </Provider>

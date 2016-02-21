@@ -6,7 +6,8 @@ import PropertyList from '../components/PropertyList'
 
 const PropertyListContainer = React.createClass({
 
-  componentDidMount() {
+  componentWillMount() {
+    console.log('PropertyListContainer - componentWillMount')
     const { dispatch, properties } = this.props
     if (!properties.length) {
       dispatch(fetchProperties())
@@ -14,13 +15,23 @@ const PropertyListContainer = React.createClass({
   },
 
   render() {
+    console.log('PropertyListContainer - children:', this.props.children)
+    console.log('params: ')
+    console.log(this.props.params)
     return (
-      <div className='ui grid'>
+      <div className='ui four column grid'>
         <div className='row'>
-          <button className='ui tiny button' onClick={()=> this.props.dispatch(fetchProperties())}>{'\u21bb' + ' ' + 'Refresh'}</button>
+          <div className='column'>
+            <button className='ui tiny button' onClick={()=> this.props.dispatch(fetchProperties())}>{'\u21bb' + ' ' + 'Refresh'}</button>
+          </div>
         </div>
         <div className='row'>
-          <PropertyList {...this.props} />
+          <div className='column'>
+            <PropertyList {...this.props} />
+          </div>
+          <div className='column'>
+            {this.props.children}
+          </div>
         </div>
       </div>
     )
