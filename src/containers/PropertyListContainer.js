@@ -4,20 +4,30 @@ import { fetchProperties } from '../actions'
 
 import PropertyList from '../components/PropertyList'
 
+function getKids(children) {
+  let kids = []
+  if (children) {
+
+    kids.push(children)
+    return kids.concat(getKids(children.props.children))
+
+  }
+  return kids
+}
+
 const PropertyListContainer = React.createClass({
 
   componentWillMount() {
-    console.log('PropertyListContainer - componentWillMount')
-    const { dispatch, properties } = this.props
-    if (!properties.length) {
-      dispatch(fetchProperties())
-    }
+    /*const props = this.props
+    if (!props.properties.length) {
+      props.dispatch(props.fetchProperties())
+    }*/
   },
 
   render() {
-    console.log('PropertyListContainer - children:', this.props.children)
-    console.log('params: ')
-    console.log(this.props.params)
+    console.log('PropertyList - render - children:', this.props.children)
+    const {children} = this.props
+    let kids = getKids(children)
     return (
       <div className='ui four column grid'>
         <div className='row'>
@@ -29,15 +39,20 @@ const PropertyListContainer = React.createClass({
           <div className='column'>
             <PropertyList {...this.props} />
           </div>
-          <div className='column'>
-            {this.props.children}
-          </div>
+          {kids.map((kid, i)=> (
+            <div key={i} className='column'>
+              {kid}
+            </div>
+          ))}
         </div>
       </div>
     )
   }
 })
 
-export default connect(({ juno: { properties, isFetching } }) => {
-  return { properties, isFetching }
+export default connect(({ juno: { properties } }) => {
+  return {
+    properties,
+    fetchProperties
+  }
 })(PropertyListContainer)

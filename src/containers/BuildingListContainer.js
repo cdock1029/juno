@@ -12,20 +12,23 @@ import BuildingList from '../components/BuildingList'
 const BuildingListContainer = React.createClass({
 
   render() {
-    console.log('BuildingListContainer - render()')
-    const { property, buildings } = this.props
-    return buildings ? (
-      <div>
-        <BuildingList buildings={buildings} />
-      </div>
-    ) : null
+    const { buildings, params } = this.props
+    return buildings ?
+      <BuildingList buildings={buildings} {...params} />
+      : null
   },
 
 })
 
 export default connect(({juno: { properties }}, ownProps) => {
-  const id = ownProps.params.id;
-  const property = properties.filter(prop => prop.id === id).shift()
-  const buildings = property.get('buildings');
-  return { property, buildings};
+
+  let buildings = null;
+  if (properties.length) {
+    const {propertyId} = ownProps.params;
+    const property = properties.filter(
+      prop => prop.id === ownProps.params.propertyId
+    ).shift()
+    buildings = property.get('buildings')
+  }
+  return {buildings}
 })(BuildingListContainer)
