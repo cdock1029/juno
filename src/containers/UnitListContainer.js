@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import {fetchListIfNeeded} from '../actions'
 
 import UnitList from '../components/UnitList'
+import EntitySelector from './EntitySelector'
 
 const UnitListContainer = React.createClass({
 

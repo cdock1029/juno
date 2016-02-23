@@ -31,7 +31,7 @@ export function fetchProperties() {
 
     return (new Parse.Query('Property'))
       .ascending('name')
-      .include('buildings')
+      .include('buildings.units')
       .find()
       .then(properties => dispatch(propertiesSuccess(properties)))
   }
@@ -139,17 +139,17 @@ function listFetchError(err) {
 * Fetch nested entities (if not already loaded)
 */
 export function fetchListIfNeeded(list) {
-  console.log('fetchListIfNeeded')
+  console.log('fetchListIfNeeded - list:', list)
   return dispatch => {
-
+    if (!list || list.length < 1) {
+      return
+    }
     dispatch(listFetchRequest())
 
     Parse.Object.fetchAllIfNeeded(list)
       .then(results => {
-        debugger
         dispatch(listFetchSuccess())
       }, err => {
-        debugger
         console.log('Error fetching list of items:', err.message)
         dispatch(listFetchError(err.message))
       })

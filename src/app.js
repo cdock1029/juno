@@ -8,7 +8,7 @@ import { render } from 'react-dom'
 import configureStore from './store'
 
 import { Provider } from 'react-redux'
-import { Router, Route, browserHistory } from 'react-router'
+import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 
 import Root from './components/Root'
@@ -17,6 +17,9 @@ import BuildingListContainer from './containers/BuildingListContainer'
 import UnitListContainer from './containers/UnitListContainer'
 import LoginContainer from './containers/LoginContainer'
 import CreateTenantContainer from './containers/CreateTenantContainer'
+
+import EntitySelectionContainer from './containers/EntitySelectionContainer'
+import EntitySelector from './containers/EntitySelector'
 
 import {fetchProperties} from './actions'
 
@@ -42,10 +45,14 @@ render((
     <div>
     <Router history={history}>
       <Route component={Root}>
-        <Route path="/" component={PropertyListContainer} onEnter={requireAuth}>
-          <Route path=":propertyId/buildings" component={BuildingListContainer}>
-            <Route path=":buildingId/units" component={UnitListContainer} />
-          </Route>
+        <Route path="/" component={EntitySelectionContainer} onEnter={requireAuth}>
+          <IndexRoute component={EntitySelector} />
+          <Route
+            path=":propertyId/buildings"
+            component={EntitySelector}/>
+          <Route
+            path=":propertyId/buildings/:buildingId/units"
+            component={EntitySelector} />
         </Route>
         <Route path="/login" component={LoginContainer} />
       </Route>
